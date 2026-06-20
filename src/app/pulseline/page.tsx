@@ -48,12 +48,28 @@ const DISTRICTS = [
   'Lalitpur',
   'Bhaktapur',
   'Pokhara',
+  'Chitwan',
   'Biratnagar',
-  'Birgunj',
-  'Dharan',
   'Butwal',
-  'Nepalgunj',
 ];
+
+// Helper function to extract district from Nominatim address
+const extractDistrict = (address: any): string | null => {
+  // Possible district keys in Nominatim response
+  const districtKeys = ['county', 'state_district', 'district'];
+  for (const key of districtKeys) {
+    if (address[key]) {
+      // Extract district name (remove "District" suffix if present)
+      let districtName = address[key].replace(/\s*District$/i, '').trim();
+      // Check against our DISTRICTS array (case insensitive)
+      const matchedDistrict = DISTRICTS.find(d => d.toLowerCase() === districtName.toLowerCase());
+      if (matchedDistrict) {
+        return matchedDistrict;
+      }
+    }
+  }
+  return null;
+};
 
 function PulseLineContent() {
   const searchParams = useSearchParams();
@@ -69,6 +85,7 @@ function PulseLineContent() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 27.7172, lng: 85.3240 });
   const [isLocating, setIsLocating] = useState(false);
+  const [detectedDistrict, setDetectedDistrict] = useState<string | null>(null);
 
   // Fetch contacts with SWR
   const { data: contacts = [], error, isLoading } = useSWR('/api/contacts', fetcher, {
@@ -109,7 +126,7 @@ function PulseLineContent() {
           setUserLocation(loc);
           setMapCenter(loc);
           
-          // Reverse geocode using Nominatim to get location text
+          // Reverse geocode using Nominatim to get location text and district
           try {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${loc.lat}&lon=${loc.lng}&zoom=18&addressdetails=1`,
@@ -123,6 +140,13 @@ function PulseLineContent() {
               const data = await response.json();
               if (data.display_name) {
                 setLocationSearch(data.display_name);
+              }
+              if (data.address) {
+                const district = extractDistrict(data.address);
+                if (district) {
+                  setDetectedDistrict(district);
+                  setSelectedDistrict(district);
+                }
               }
             }
           } catch (err) {
@@ -222,12 +246,22 @@ function PulseLineContent() {
     return matchesSearch && matchesLocationSearch && matchesCategory && matchesDistrict && matchesSOSCategory;
   });
 
-  // Sort by distance in SOS mode
+  // Sort in SOS mode: National first, then same district, then nearest
   if (isSOSMode && userLocation) {
     filteredContacts = [...filteredContacts].sort((a, b) => {
-      // First, prioritize contacts with no location (emergency numbers like 100, 101)
-      if (!a.latitude || !a.longitude) return -1;
-      if (!b.latitude || !b.longitude) return 1;
+      // 1. National emergency numbers (district === 'All') come first
+      if (a.district === 'All' && b.district !== 'All') return -1;
+      if (b.district === 'All' && a.district !== 'All') return 1;
+      
+      // 2. If we have a detected district, same district comes next
+      if (detectedDistrict) {
+        if (a.district === detectedDistrict && b.district !== detectedDistrict) return -1;
+        if (b.district === detectedDistrict && a.district !== detectedDistrict) return 1;
+      }
+      
+      // 3. Then sort by distance
+      if (!a.latitude || !a.longitude) return 1;
+      if (!b.latitude || !b.longitude) return -1;
       
       const distA = calculateDistance(userLocation.lat, userLocation.lng, a.latitude, a.longitude);
       const distB = calculateDistance(userLocation.lat, userLocation.lng, b.latitude, b.longitude);

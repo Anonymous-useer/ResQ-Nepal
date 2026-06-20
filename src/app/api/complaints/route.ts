@@ -32,6 +32,7 @@ export async function POST(request: Request) {
     const complainant_name = formData.get('complainant_name') as string | null;
     const complainant_phone = formData.get('complainant_phone') as string | null;
     const location_text = formData.get('location_text') as string | null;
+    const district = formData.get('district') as string | null;
     const latitude = formData.get('latitude') ? parseFloat(formData.get('latitude') as string) : null;
     const longitude = formData.get('longitude') ? parseFloat(formData.get('longitude') as string) : null;
     const is_anonymous = formData.get('is_anonymous') === 'true';
@@ -62,12 +63,12 @@ export async function POST(request: Request) {
     const info = await db.prepare(`
       INSERT INTO complaints (
         subject, category, description, status, complaint_id, 
-        complainant_name, complainant_phone, location_text, latitude, longitude, is_anonymous, image_path
-      ) VALUES (?, ?, ?, 'Submitted', ?, ?, ?, ?, ?, ?, ?, ?)
+        complainant_name, complainant_phone, location_text, district, latitude, longitude, is_anonymous, image_path
+      ) VALUES (?, ?, ?, 'Submitted', ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       subject, category, description, complaintId,
       complainant_name || null, complainant_phone || null, 
-      location_text || null, latitude || null, longitude || null, 
+      location_text || null, district || null, latitude || null, longitude || null, 
       is_anonymous ? 1 : 0, image_path
     );
 

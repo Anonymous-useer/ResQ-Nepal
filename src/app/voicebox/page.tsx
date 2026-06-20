@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { ShieldAlert, FileText, Search, UserCheck, Send, MapPin, LocateFixed, User } from 'lucide-react';
+import { ShieldAlert, FileText, Search, UserCheck, Send, MapPin, User } from 'lucide-react';
 import { formatNPT } from '@/lib/utils';
+import LocationInput, { LocationData, extractDistrict } from '@/components/LocationInput';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -17,10 +18,12 @@ export default function VoiceBoxPage() {
   const [complainantName, setComplainantName] = useState('');
   const [complainantPhone, setComplainantPhone] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [locationText, setLocationText] = useState('');
-  const [latitude, setLatitude] = useState<string | null>(null);
-  const [longitude, setLongitude] = useState<string | null>(null);
-  const [isLocating, setIsLocating] = useState(false);
+  const [locationData, setLocationData] = useState<LocationData>({
+    locationText: '',
+    district: null,
+    latitude: null,
+    longitude: null,
+  });
   const [isLodging, setIsLodging] = useState(false);
   const [lodgeSuccess, setLodgeSuccess] = useState<any | null>(null);
   const [lodgeError, setLodgeError] = useState<string | null>(null);
@@ -45,27 +48,6 @@ export default function VoiceBoxPage() {
     }
   }, []);
 
-  const getLocation = () => {
-    setIsLocating(true);
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      setIsLocating(false);
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLatitude(position.coords.latitude.toString());
-        setLongitude(position.coords.longitude.toString());
-        setIsLocating(false);
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        alert('Unable to retrieve your location.');
-        setIsLocating(false);
-      }
-    );
-  };
-
   // --- Lodge Complaint Handler ---
   const handleLodgeComplaint = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,9 +64,10 @@ export default function VoiceBoxPage() {
         formData.append('complainant_name', complainantName);
         formData.append('complainant_phone', complainantPhone);
       }
-      if (locationText) formData.append('location_text', locationText);
-      if (latitude) formData.append('latitude', latitude);
-      if (longitude) formData.append('longitude', longitude);
+      if (locationData.locationText) formData.append('location_text', locationData.locationText);
+      if (locationData.district) formData.append('district', locationData.district);
+      if (locationData.latitude) formData.append('latitude', locationData.latitude.toString());
+      if (locationData.longitude) formData.append('longitude', locationData.longitude.toString());
       formData.append('is_anonymous', isAnonymous.toString());
       if (selectedImage) {
         formData.append('image', selectedImage);
@@ -112,9 +95,12 @@ export default function VoiceBoxPage() {
       setComplainantName('');
       setComplainantPhone('');
       setIsAnonymous(false);
-      setLocationText('');
-      setLatitude(null);
-      setLongitude(null);
+      setLocationData({
+        locationText: '',
+        district: null,
+        latitude: null,
+        longitude: null,
+      });
       setSelectedImage(null);
     } catch (err: any) {
       setLodgeError(err.message || 'Error filing complaint.');
@@ -277,30 +263,14 @@ export default function VoiceBoxPage() {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-[#111318]">Location</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="e.g. Patan Dhoka, Lalitpur"
-                    value={locationText}
-                    onChange={(e) => setLocationText(e.target.value)}
-                    className="flex-1 bg-white border border-[#E4E7EC] rounded-md px-3 py-2 text-xs text-[#111318] focus:outline-none focus:border-[#1B4FD8]"
-                  />
-                  <button
-                    type="button"
-                    onClick={getLocation}
-                    disabled={isLocating}
-                    className="flex items-center justify-center gap-1 px-3 py-2 bg-white border border-[#E4E7EC] rounded-md text-[#5A6072] hover:bg-[#F7F8FA] transition-all disabled:opacity-70"
-                  >
-                    {isLocating ? (
-                      <div className="animate-spin h-4 w-4 border-2 border-[#1B4FD8] border-t-transparent rounded-full" />
-                    ) : (
-                      <LocateFixed className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {latitude && longitude && (
+                <LocationInput
+                  value={locationData}
+                  onChange={setLocationData}
+                  placeholder="e.g. Patan Dhoka, Lalitpur"
+                />
+                {locationData.latitude && locationData.longitude && (
                   <p className="text-[10px] text-[#9AA0AD] mt-1">
-                    Lat: {parseFloat(latitude).toFixed(4)}, Lon: {parseFloat(longitude).toFixed(4)}
+                    Lat: {parseFloat(locationData.latitude.toString()).toFixed(4)}, Lon: {parseFloat(locationData.longitude.toString()).toFixed(4)}
                   </p>
                 )}
               </div>

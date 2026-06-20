@@ -16,6 +16,7 @@ import {
   Calendar, 
   Building
 } from 'lucide-react';
+import LocationInput, { LocationData } from '@/components/LocationInput';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -37,10 +38,12 @@ export default function AidDropPage() {
   const [donorEmail, setDonorEmail] = useState('');
   const [donorAddress, setDonorAddress] = useState('');
   const [donorEmergencyContact, setDonorEmergencyContact] = useState('');
-  const [donorLocationText, setDonorLocationText] = useState('');
-  const [donorLatitude, setDonorLatitude] = useState<string | null>(null);
-  const [donorLongitude, setDonorLongitude] = useState<string | null>(null);
-  const [isLocatingDonor, setIsLocatingDonor] = useState(false);
+  const [donorLocationData, setDonorLocationData] = useState<LocationData>({
+    locationText: '',
+    district: null,
+    latitude: null,
+    longitude: null
+  });
   const [isSubmittingDonor, setIsSubmittingDonor] = useState(false);
   const [donorSuccess, setDonorSuccess] = useState(false);
   const [donorError, setDonorError] = useState<string | null>(null);
@@ -72,54 +75,6 @@ export default function AidDropPage() {
     return matchesGroup && matchesCity;
   });
 
-  // --- Geolocation function ---
-  const getLocation = (
-    setLat: (lat: string) => void, 
-    setLng: (lng: string) => void, 
-    setLocationText: (text: string) => void,
-    setIsLocating: (val: boolean) => void
-  ) => {
-    setIsLocating(true);
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      setIsLocating(false);
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        setLat(position.coords.latitude.toString());
-        setLng(position.coords.longitude.toString());
-        
-        // Reverse geocode using Nominatim
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=18&addressdetails=1`,
-            {
-              headers: {
-                'User-Agent': 'ResQ Nepal (https://resq-nepal.app)',
-              },
-            }
-          );
-          if (response.ok) {
-            const data = await response.json();
-            if (data.display_name) {
-              setLocationText(data.display_name);
-            }
-          }
-        } catch (err) {
-          console.error('Reverse geocoding error:', err);
-        }
-        
-        setIsLocating(false);
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        alert('Unable to retrieve your location.');
-        setIsLocating(false);
-      }
-    );
-  };
-
   // --- Donor form submission ---
   const handleDonorSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,14 +92,15 @@ export default function AidDropPage() {
           contact: donorContact,
           blood_group: donorBloodGroup,
           city: donorCity,
+          district: donorLocationData.district,
           date_of_birth: donorDateOfBirth,
           gender: donorGender,
           email: donorEmail,
           address: donorAddress,
           emergency_contact: donorEmergencyContact,
-          location_text: donorLocationText,
-          latitude: donorLatitude ? parseFloat(donorLatitude) : null,
-          longitude: donorLongitude ? parseFloat(donorLongitude) : null,
+          location_text: donorLocationData.locationText,
+          latitude: donorLocationData.latitude,
+          longitude: donorLocationData.longitude,
         }),
       });
 
@@ -161,9 +117,12 @@ export default function AidDropPage() {
         setDonorEmail('');
         setDonorAddress('');
         setDonorEmergencyContact('');
-        setDonorLocationText('');
-        setDonorLatitude(null);
-        setDonorLongitude(null);
+        setDonorLocationData({
+          locationText: '',
+          district: null,
+          latitude: null,
+          longitude: null
+        });
       } else {
         const errData = await res.json();
         throw new Error(errData.error || 'Failed to register');
@@ -359,30 +318,14 @@ export default function AidDropPage() {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-[#111318]">Location</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="e.g. Patan Dhoka"
-                    value={donorLocationText}
-                    onChange={(e) => setDonorLocationText(e.target.value)}
-                    className="flex-1 bg-white border border-[#E4E7EC] rounded-md px-3 py-2 text-xs text-[#111318] focus:outline-none focus:border-[#1B4FD8]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => getLocation(setDonorLatitude, setDonorLongitude, setDonorLocationText, setIsLocatingDonor)}
-                    disabled={isLocatingDonor}
-                    className="flex items-center justify-center gap-1 px-3 py-2 bg-white border border-[#E4E7EC] rounded-md text-[#5A6072] hover:bg-[#F7F8FA] transition-all disabled:opacity-70"
-                  >
-                    {isLocatingDonor ? (
-                      <div className="animate-spin h-4 w-4 border-2 border-[#1B4FD8] border-t-transparent rounded-full" />
-                    ) : (
-                      <LocateFixed className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {donorLatitude && donorLongitude && (
+                <LocationInput
+                  value={donorLocationData}
+                  onChange={setDonorLocationData}
+                  placeholder="e.g. Patan Dhoka"
+                />
+                {donorLocationData.latitude && donorLocationData.longitude && (
                   <p className="text-[10px] text-[#9AA0AD] mt-1">
-                    Lat: {parseFloat(donorLatitude).toFixed(4)}, Lon: {parseFloat(donorLongitude).toFixed(4)}
+                    Lat: {parseFloat(donorLocationData.latitude.toString()).toFixed(4)}, Lon: {parseFloat(donorLocationData.longitude.toString()).toFixed(4)}
                   </p>
                 )}
               </div>

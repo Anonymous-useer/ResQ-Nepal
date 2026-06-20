@@ -10,14 +10,14 @@
     "longitude": null
   },
   {
-    "name": "Fire Brigade (Kathmandu)",
+    "name": "Fire Brigade (Emergency)",
     "number": "101",
     "category": "Fire Brigade",
-    "description": "Kathmandu central fire station for immediate fire emergencies.",
-    "district": "Kathmandu",
-    "location_text": "Kathmandu Metropolitan City",
-    "latitude": 27.7172,
-    "longitude": 85.3240
+    "description": "Immediate fire emergency response across Nepal.",
+    "district": "All",
+    "location_text": "Nationwide",
+    "latitude": null,
+    "longitude": null
   },
   {
     "name": "Nepal Red Cross Society (Ambulance)",
@@ -59,64 +59,368 @@
     "latitude": 27.6979,
     "longitude": 85.3200
   },
+
+  // Kathmandu District
   {
-    "name": "Nepal Electricity Authority (NEA)",
-    "number": "1150",
-    "category": "Utility",
-    "description": "Reporting power outages, electrical faults, and live wire dangers.",
-    "district": "All",
-    "location_text": "Nationwide",
-    "latitude": null,
-    "longitude": null
-  },
-  {
-    "name": "Mental Health Helpline Nepal",
-    "number": "1166",
-    "category": "Mental Health",
-    "description": "24/7 free mental health support, crisis counselling, and suicide prevention.",
-    "district": "All",
-    "location_text": "Nationwide",
-    "latitude": null,
-    "longitude": null
-  },
-  {
-    "name": "Kathmandu Upatyaka Khanepani Limited (KUKL)",
-    "number": "1113",
-    "category": "Utility",
-    "description": "Water supply issues, pipeline leaks, and emergency distribution.",
+    "name": "Kathmandu Metropolitan Police",
+    "number": "01-4261945",
+    "category": "Police",
+    "description": "Local police station for Kathmandu city incidents.",
     "district": "Kathmandu",
-    "location_text": "Kathmandu Valley",
-    "latitude": 27.7000,
-    "longitude": 85.3100
+    "location_text": "New Road, Kathmandu",
+    "latitude": 27.7080,
+    "longitude": 85.3180
   },
   {
-    "name": "National Human Rights Commission (NHRC)",
-    "number": "1208",
+    "name": "Kathmandu Fire Station",
+    "number": "01-4261901",
+    "category": "Fire Brigade",
+    "description": "Central fire station for Kathmandu valley.",
+    "district": "Kathmandu",
+    "location_text": "Putalisadak, Kathmandu",
+    "latitude": 27.7150,
+    "longitude": 85.3200
+  },
+  {
+    "name": "Bir Hospital Emergency",
+    "number": "01-4221119",
+    "category": "Medical",
+    "description": "24/7 emergency and trauma care services.",
+    "district": "Kathmandu",
+    "location_text": "Tundikhel, Kathmandu",
+    "latitude": 27.7045,
+    "longitude": 85.3180
+  },
+  {
+    "name": "NEOC Kathmandu",
+    "number": "01-4261400",
+    "category": "Disaster Management",
+    "description": "Local disaster response and coordination.",
+    "district": "Kathmandu",
+    "location_text": "Singha Durbar, Kathmandu",
+    "latitude": 27.6980,
+    "longitude": 85.3200
+  },
+  {
+    "name": "Women's Cell - Kathmandu Police",
+    "number": "01-4261945",
     "category": "Women & Child Safety",
-    "description": "Reporting human rights violations and discrimination.",
+    "description": "Dedicated support for women and child safety issues.",
     "district": "Kathmandu",
-    "location_text": "Kathmandu",
-    "latitude": 27.7050,
-    "longitude": 85.3150
+    "location_text": "Hanuman Dhoka, Kathmandu",
+    "latitude": 27.7030,
+    "longitude": 85.3080
+  },
+
+  // Lalitpur District
+  {
+    "name": "Lalitpur Metropolitan Police",
+    "number": "01-5521201",
+    "category": "Police",
+    "description": "Local police services for Lalitpur city.",
+    "district": "Lalitpur",
+    "location_text": "Patan Dhoka, Lalitpur",
+    "latitude": 27.6730,
+    "longitude": 85.3180
   },
   {
-    "name": "Patan Hospital (Emergency Department)",
+    "name": "Lalitpur Fire Station",
+    "number": "01-5521100",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Lalitpur.",
+    "district": "Lalitpur",
+    "location_text": "Lagankhel, Lalitpur",
+    "latitude": 27.6680,
+    "longitude": 85.3120
+  },
+  {
+    "name": "Patan Hospital Emergency",
     "number": "01-5522295",
     "category": "Medical",
-    "description": "Emergency services, trauma care, and clinical facilities.",
+    "description": "Emergency medical services at Patan Hospital.",
     "district": "Lalitpur",
     "location_text": "Patan, Lalitpur",
     "latitude": 27.6720,
     "longitude": 85.3180
   },
   {
-    "name": "Nepal Red Cross Blood Bank",
-    "number": "01-4272718",
-    "category": "Medical",
-    "description": "Emergency blood supply, donor coordination, and inventory checking.",
-    "district": "Kathmandu",
-    "location_text": "Kathmandu",
-    "latitude": 27.7080,
+    "name": "Lalitpur Disaster Management Office",
+    "number": "01-5521400",
+    "category": "Disaster Management",
+    "description": "Local disaster preparedness and response.",
+    "district": "Lalitpur",
+    "location_text": "Lalitpur Municipality",
+    "latitude": 27.6700,
     "longitude": 85.3150
+  },
+  {
+    "name": "Maiti Nepal - Lalitpur",
+    "number": "01-5521300",
+    "category": "Women & Child Safety",
+    "description": "Support for survivors of trafficking and violence.",
+    "district": "Lalitpur",
+    "location_text": "Pulchowk, Lalitpur",
+    "latitude": 27.6650,
+    "longitude": 85.3190
+  },
+
+  // Bhaktapur District
+  {
+    "name": "Bhaktapur Metropolitan Police",
+    "number": "01-6612001",
+    "category": "Police",
+    "description": "Police services for Bhaktapur city.",
+    "district": "Bhaktapur",
+    "location_text": "Durbar Square, Bhaktapur",
+    "latitude": 27.6730,
+    "longitude": 85.4270
+  },
+  {
+    "name": "Bhaktapur Fire Station",
+    "number": "01-6612100",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Bhaktapur.",
+    "district": "Bhaktapur",
+    "location_text": "Bhaktapur",
+    "latitude": 27.6700,
+    "longitude": 85.4250
+  },
+  {
+    "name": "Bhaktapur Hospital Emergency",
+    "number": "01-6612295",
+    "category": "Medical",
+    "description": "Emergency care at Bhaktapur Hospital.",
+    "district": "Bhaktapur",
+    "location_text": "Bhaktapur",
+    "latitude": 27.6720,
+    "longitude": 85.4280
+  },
+  {
+    "name": "Bhaktapur DM Office",
+    "number": "01-6612300",
+    "category": "Disaster Management",
+    "description": "Disaster management for Bhaktapur district.",
+    "district": "Bhaktapur",
+    "location_text": "Bhaktapur Municipality",
+    "latitude": 27.6710,
+    "longitude": 85.4260
+  },
+  {
+    "name": "Bhaktapur Women's Service Center",
+    "number": "01-6612400",
+    "category": "Women & Child Safety",
+    "description": "Support for women and child safety.",
+    "district": "Bhaktapur",
+    "location_text": "Bhaktapur",
+    "latitude": 27.6690,
+    "longitude": 85.4240
+  },
+
+  // Pokhara District
+  {
+    "name": "Pokhara Metropolitan Police",
+    "number": "061-520201",
+    "category": "Police",
+    "description": "Police services for Pokhara city.",
+    "district": "Pokhara",
+    "location_text": "Chipledhunga, Pokhara",
+    "latitude": 28.2090,
+    "longitude": 83.9850
+  },
+  {
+    "name": "Pokhara Fire Station",
+    "number": "061-520301",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Pokhara.",
+    "district": "Pokhara",
+    "location_text": "Pokhara",
+    "latitude": 28.2080,
+    "longitude": 83.9840
+  },
+  {
+    "name": "Pokhara Grande Hospital Emergency",
+    "number": "061-520401",
+    "category": "Medical",
+    "description": "Emergency medical services in Pokhara.",
+    "district": "Pokhara",
+    "location_text": "Lakeside, Pokhara",
+    "latitude": 28.2070,
+    "longitude": 83.9830
+  },
+  {
+    "name": "Kaski District DM Office",
+    "number": "061-520501",
+    "category": "Disaster Management",
+    "description": "Disaster management for Kaski/Pokhara.",
+    "district": "Pokhara",
+    "location_text": "Pokhara",
+    "latitude": 28.2060,
+    "longitude": 83.9820
+  },
+  {
+    "name": "Aama Samuha - Pokhara",
+    "number": "061-520601",
+    "category": "Women & Child Safety",
+    "description": "Women's support group in Pokhara.",
+    "district": "Pokhara",
+    "location_text": "Pokhara",
+    "latitude": 28.2050,
+    "longitude": 83.9810
+  },
+
+  // Chitwan District
+  {
+    "name": "Chitwan District Police",
+    "number": "056-520201",
+    "category": "Police",
+    "description": "Police services for Chitwan.",
+    "district": "Chitwan",
+    "location_text": "Bharatpur, Chitwan",
+    "latitude": 27.6840,
+    "longitude": 84.4320
+  },
+  {
+    "name": "Chitwan Fire Station",
+    "number": "056-520301",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Chitwan.",
+    "district": "Chitwan",
+    "location_text": "Bharatpur",
+    "latitude": 27.6830,
+    "longitude": 84.4310
+  },
+  {
+    "name": "B.P. Koirala Memorial Cancer Hospital Emergency",
+    "number": "056-520401",
+    "category": "Medical",
+    "description": "Emergency services in Chitwan.",
+    "district": "Chitwan",
+    "location_text": "Bharatpur",
+    "latitude": 27.6820,
+    "longitude": 84.4300
+  },
+  {
+    "name": "Chitwan DM Office",
+    "number": "056-520501",
+    "category": "Disaster Management",
+    "description": "Disaster management for Chitwan.",
+    "district": "Chitwan",
+    "location_text": "Bharatpur",
+    "latitude": 27.6810,
+    "longitude": 84.4290
+  },
+  {
+    "name": "Chitwan Women's Development Office",
+    "number": "056-520601",
+    "category": "Women & Child Safety",
+    "description": "Support for women and children in Chitwan.",
+    "district": "Chitwan",
+    "location_text": "Bharatpur",
+    "latitude": 27.6800,
+    "longitude": 84.4280
+  },
+
+  // Biratnagar District
+  {
+    "name": "Biratnagar Metropolitan Police",
+    "number": "021-520201",
+    "category": "Police",
+    "description": "Police services for Biratnagar.",
+    "district": "Biratnagar",
+    "location_text": "Biratnagar",
+    "latitude": 26.4830,
+    "longitude": 87.2750
+  },
+  {
+    "name": "Biratnagar Fire Station",
+    "number": "021-520301",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Biratnagar.",
+    "district": "Biratnagar",
+    "location_text": "Biratnagar",
+    "latitude": 26.4820,
+    "longitude": 87.2740
+  },
+  {
+    "name": "Biratnagar Hospital Emergency",
+    "number": "021-520401",
+    "category": "Medical",
+    "description": "Emergency medical services in Biratnagar.",
+    "district": "Biratnagar",
+    "location_text": "Biratnagar",
+    "latitude": 26.4810,
+    "longitude": 87.2730
+  },
+  {
+    "name": "Morang DM Office",
+    "number": "021-520501",
+    "category": "Disaster Management",
+    "description": "Disaster management for Morang/Biratnagar.",
+    "district": "Biratnagar",
+    "location_text": "Biratnagar",
+    "latitude": 26.4800,
+    "longitude": 87.2720
+  },
+  {
+    "name": "Biratnagar Women's Service Center",
+    "number": "021-520601",
+    "category": "Women & Child Safety",
+    "description": "Support for women and child safety.",
+    "district": "Biratnagar",
+    "location_text": "Biratnagar",
+    "latitude": 26.4790,
+    "longitude": 87.2710
+  },
+
+  // Butwal District
+  {
+    "name": "Butwal Sub-Metropolitan Police",
+    "number": "071-520201",
+    "category": "Police",
+    "description": "Police services for Butwal.",
+    "district": "Butwal",
+    "location_text": "Butwal",
+    "latitude": 27.7050,
+    "longitude": 83.4420
+  },
+  {
+    "name": "Butwal Fire Station",
+    "number": "071-520301",
+    "category": "Fire Brigade",
+    "description": "Fire emergency response for Butwal.",
+    "district": "Butwal",
+    "location_text": "Butwal",
+    "latitude": 27.7040,
+    "longitude": 83.4410
+  },
+  {
+    "name": "Butwal Hospital Emergency",
+    "number": "071-520401",
+    "category": "Medical",
+    "description": "Emergency medical services in Butwal.",
+    "district": "Butwal",
+    "location_text": "Butwal",
+    "latitude": 27.7030,
+    "longitude": 83.4400
+  },
+  {
+    "name": "Rupandehi DM Office",
+    "number": "071-520501",
+    "category": "Disaster Management",
+    "description": "Disaster management for Rupandehi/Butwal.",
+    "district": "Butwal",
+    "location_text": "Butwal",
+    "latitude": 27.7020,
+    "longitude": 83.4390
+  },
+  {
+    "name": "Butwal Women's Development Office",
+    "number": "071-520601",
+    "category": "Women & Child Safety",
+    "description": "Support for women and children in Butwal.",
+    "district": "Butwal",
+    "location_text": "Butwal",
+    "latitude": 27.7010,
+    "longitude": 83.4380
   }
 ]

@@ -48,6 +48,7 @@ export async function POST(request: Request) {
       contact, 
       blood_group, 
       city, 
+      district,
       date_of_birth, 
       gender, 
       email, 
@@ -65,15 +66,16 @@ export async function POST(request: Request) {
     // Insert into donors table
     const info = await db.prepare(`
       INSERT INTO donors (
-        type, name, contact, blood_group, city, date_of_birth, gender, email, address, 
+        type, name, contact, blood_group, city, district, date_of_birth, gender, email, address, 
         emergency_contact, location_text, latitude, longitude, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')
     `).run(
       type,
       name,
       contact,
       blood_group || null,
       city || null,
+      district || null,
       date_of_birth || null,
       gender || null,
       email || null,
