@@ -103,7 +103,8 @@ const initializeSchema = async () => {
       emergency_contact TEXT,
       location_text TEXT,
       latitude REAL,
-      longitude REAL
+      longitude REAL,
+      medical_report_path TEXT
     )
   `);
 
@@ -117,6 +118,7 @@ const initializeSchema = async () => {
   try { await c.execute('ALTER TABLE donors ADD COLUMN latitude REAL'); } catch (e) {}
   try { await c.execute('ALTER TABLE donors ADD COLUMN longitude REAL'); } catch (e) {}
   try { await c.execute('ALTER TABLE donors ADD COLUMN district TEXT'); } catch (e) {}
+  try { await c.execute('ALTER TABLE donors ADD COLUMN medical_report_path TEXT'); } catch (e) {}
 
   // Notices table
   await c.execute(`

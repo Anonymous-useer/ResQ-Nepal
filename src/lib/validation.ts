@@ -23,6 +23,21 @@ export const validateImageFile = (file: File): { valid: boolean; message?: strin
   return { valid: true };
 };
 
+export const validateMedicalReportFile = (file: File): { valid: boolean; message?: string } => {
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+
+  if (!allowedTypes.includes(file.type)) {
+    return { valid: false, message: 'Only PDF, JPEG, PNG, and WebP files are allowed' };
+  }
+
+  if (file.size > maxSize) {
+    return { valid: false, message: 'File size must be less than 10MB' };
+  }
+
+  return { valid: true };
+};
+
 export const validateRequired = (value: string): boolean => {
   return value.trim().length > 0;
 };

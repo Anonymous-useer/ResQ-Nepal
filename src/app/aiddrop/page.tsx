@@ -13,17 +13,17 @@ import {
   User, 
   Mail, 
   Calendar, 
-  Building
+  Building,
+  FileText,
+  X
 } from 'lucide-react';
 import LocationInput, { LocationData } from '@/components/LocationInput';
-import { validateNepaliPhone, validateEmail, validateRequired } from '@/lib/validation';
+import { validateNepaliPhone, validateEmail, validateRequired, validateMedicalReportFile } from '@/lib/validation';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 const GENDERS = ['Male', 'Female', 'Other'];
-
-
 
 export default function AidDropPage() {
   const [activeTab, setActiveTab] = useState<'donor' | 'recipient'>('donor');
@@ -44,6 +44,8 @@ export default function AidDropPage() {
     latitude: null,
     longitude: null
   });
+  const [medicalReport, setMedicalReport] = useState<File | null>(null);
+  const [medicalReportPreview, setMedicalReportPreview] = useState<string | null>(null);
   const [isSubmittingDonor, setIsSubmittingDonor] = useState(false);
   const [donorSuccess, setDonorSuccess] = useState(false);
   const [donorError, setDonorError] = useState<string | null>(null);
@@ -56,6 +58,7 @@ export default function AidDropPage() {
     emergencyContact?: string;
     dateOfBirth?: string;
     gender?: string;
+    medicalReport?: string;
   }>({});
 
   // --- Recipient Search States ---
@@ -121,6 +124,14 @@ export default function AidDropPage() {
     if (!validateRequired(donorGender)) {
       newErrors.gender = 'Gender is required';
     }
+    if (!medicalReport) {
+      newErrors.medicalReport = 'Medical report is required';
+    } else {
+      const fileValidation = validateMedicalReportFile(medicalReport);
+      if (!fileValidation.valid) {
+        newErrors.medicalReport = fileValidation.message;
+      }
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setDonorFormErrors(newErrors);
@@ -129,25 +140,28 @@ export default function AidDropPage() {
     }
 
     try {
+      const formData = new FormData();
+      formData.append('type', 'blood');
+      formData.append('name', donorName);
+      formData.append('contact', donorContact);
+      formData.append('blood_group', donorBloodGroup);
+      formData.append('city', donorCity);
+      formData.append('district', donorLocationData.district || '');
+      formData.append('date_of_birth', donorDateOfBirth);
+      formData.append('gender', donorGender);
+      formData.append('email', donorEmail);
+      formData.append('address', donorAddress);
+      formData.append('emergency_contact', donorEmergencyContact);
+      formData.append('location_text', donorLocationData.locationText || '');
+      if (donorLocationData.latitude) formData.append('latitude', donorLocationData.latitude.toString());
+      if (donorLocationData.longitude) formData.append('longitude', donorLocationData.longitude.toString());
+      if (medicalReport) {
+        formData.append('medical_report', medicalReport);
+      }
+
       const res = await fetch('/api/donors', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'blood',
-          name: donorName,
-          contact: donorContact,
-          blood_group: donorBloodGroup,
-          city: donorCity,
-          district: donorLocationData.district,
-          date_of_birth: donorDateOfBirth,
-          gender: donorGender,
-          email: donorEmail,
-          address: donorAddress,
-          emergency_contact: donorEmergencyContact,
-          location_text: donorLocationData.locationText,
-          latitude: donorLocationData.latitude,
-          longitude: donorLocationData.longitude,
-        }),
+        body: formData
       });
 
       if (res.ok) {
@@ -169,6 +183,8 @@ export default function AidDropPage() {
           latitude: null,
           longitude: null
         });
+        setMedicalReport(null);
+        setMedicalReportPreview(null);
         setDonorFormErrors({});
       } else {
         const errData = await res.json();
@@ -179,6 +195,31 @@ export default function AidDropPage() {
     } finally {
       setIsSubmittingDonor(false);
     }
+  };
+
+  const handleMedicalReportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setMedicalReport(file);
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        // Image preview
+        setMedicalReportPreview(URL.createObjectURL(file));
+      } else {
+        // For non-image files, just show filename
+        setMedicalReportPreview(null);
+      }
+    } else {
+      setMedicalReportPreview(null);
+    }
+    // Clear error when user selects a file
+    if (donorFormErrors.medicalReport) {
+      setDonorFormErrors(prev => ({ ...prev, medicalReport: undefined }));
+    }
+  };
+
+  const removeMedicalReport = () => {
+    setMedicalReport(null);
+    setMedicalReportPreview(null);
   };
 
   return (
@@ -413,6 +454,48 @@ export default function AidDropPage() {
                   <p className="text-[10px] text-[#9AA0AD] mt-1">
                     Lat: {parseFloat(donorLocationData.latitude.toString()).toFixed(4)}, Lon: {parseFloat(donorLocationData.longitude.toString()).toFixed(4)}
                   </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-[#111318]">Past Medical Report *</label>
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png,.webp"
+                  onChange={handleMedicalReportChange}
+                  className={`bg-white border rounded-md px-3 py-2 text-xs text-[#111318] focus:outline-none file:mr-2 file:py-1 file:px-2 file:border-0 file:rounded file:bg-[#1B4FD8] file:text-white file:text-xs file:cursor-pointer ${donorFormErrors.medicalReport ? 'border-red-500 focus:border-red-500' : 'border-[#E4E7EC] focus:border-[#1B4FD8]'}`}
+                />
+                <p className="text-[10px] text-[#9AA0AD]">
+                  Upload a recent medical report or eligibility document (PDF, JPEG, PNG, WEBP — max 10 MB).
+                </p>
+                {medicalReport && (
+                  <div className="mt-2 p-3 bg-[#F7F8FA] border border-[#E4E7EC] rounded-md flex items-center gap-3">
+                    {medicalReport.type.startsWith('image/') && medicalReportPreview ? (
+                      <img
+                        src={medicalReportPreview}
+                        alt="Medical report preview"
+                        className="h-16 w-20 object-cover rounded-md border border-[#E4E7EC]"
+                      />
+                    ) : (
+                      <FileText className="h-10 w-10 text-[#5A6072]" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-[#111318] truncate">{medicalReport.name}</p>
+                      <p className="text-[10px] text-[#9AA0AD]">
+                        {(medicalReport.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={removeMedicalReport}
+                      className="p-1.5 text-red-600 hover:bg-red-100 rounded-md transition-colors"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+                {donorFormErrors.medicalReport && (
+                  <p className="text-[10px] text-red-600 font-semibold">{donorFormErrors.medicalReport}</p>
                 )}
               </div>
 

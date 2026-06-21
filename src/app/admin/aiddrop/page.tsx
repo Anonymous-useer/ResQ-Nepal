@@ -635,6 +635,40 @@ export default function AdminAidDropPage() {
                   </span>
                 </div>
               </div>
+
+              <div>
+                <span className="text-[#9AA0AD] font-mono block mb-1">Medical Report</span>
+                {viewDonorDetails.medical_report_path ? (
+                  <div className="flex flex-col gap-2">
+                    {viewDonorDetails.medical_report_path.startsWith('data:image') ? (
+                      <img
+                        src={viewDonorDetails.medical_report_path}
+                        alt="Medical Report"
+                        className="w-full h-64 object-contain rounded-md border border-[#E4E7EC]"
+                      />
+                    ) : (
+                      <a
+                        href={viewDonorDetails.medical_report_path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 bg-[#F7F8FA] border border-[#E4E7EC] rounded-md hover:bg-[#E4E7EC] transition-colors"
+                      >
+                        <FileText className="h-5 w-5 text-[#1B4FD8]" />
+                        <span className="font-bold text-[#111318]">View Medical Report</span>
+                      </a>
+                    )}
+                    <a
+                      href={viewDonorDetails.medical_report_path}
+                      download="medical-report"
+                      className="text-[#1B4FD8] hover:underline text-xs font-semibold"
+                    >
+                      Download Report
+                    </a>
+                  </div>
+                ) : (
+                  <span className="text-[#9AA0AD] italic">No medical report uploaded</span>
+                )}
+              </div>
             </div>
           </div>
         </div>
