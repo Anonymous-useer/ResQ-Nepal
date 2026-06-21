@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import useSWR from 'swr';
-import { Heart, Search, Plus, Trash2, X, Check, Ban, Edit, MapPin, Eye } from 'lucide-react';
+import { Heart, Search, Plus, Trash2, X, Check, Ban, Edit, MapPin, Eye, FileText } from 'lucide-react';
 import { formatNPT } from '@/lib/utils';
 import { validateNepaliPhone, validateRequired } from '@/lib/validation';
 
